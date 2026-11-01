@@ -367,6 +367,10 @@
             <p class="login-result" id="loginResult" aria-live="polite">Demo credentials: Student 04 · 34-24 · Section B · K.R.Z.P.H.S (same password for all students).</p>
           </form>
           <form class="login-form" id="phoneLoginForm" role="tabpanel" aria-labelledby="phoneModeButton" hidden>
+            <label for="otpStudentName">Student name</label>
+            <input id="otpStudentName" name="studentName" autocomplete="name" placeholder="Enter your student name" required>
+            <label for="otpSection">Section</label>
+            <select id="otpSection" name="section" required><option value="A">Section A</option><option value="B">Section B</option><option value="C">Section C</option></select>
             <label for="mobileNumber">Mobile number</label>
             <input id="mobileNumber" name="mobileNumber" type="tel" inputmode="tel" autocomplete="tel" placeholder="Enter your mobile number" required>
             <button class="button" type="button" id="sendOtpButton">Send OTP&nbsp; ↗</button>
@@ -544,10 +548,12 @@
     phoneLoginForm.addEventListener('submit', event => {
       event.preventDefault();
       const numberDigits = mobileNumberInput.value.replace(/\D/g, '');
+      const studentName = document.getElementById('otpStudentName').value.trim().replace(/\s+/g, ' ');
+      const section = document.getElementById('otpSection').value;
       const isValid = currentDemoOtp && Date.now() < otpExpiresAt && numberDigits === otpPhoneNumber && otpCodeInput.value === currentDemoOtp;
       otpResult.className = `login-result ${isValid ? 'success' : 'error'}`;
       otpResult.textContent = isValid
-        ? 'Mobile number verified for this demo. Real SMS and student account matching are not connected.'
+        ? `Welcome, ${studentName} · Section ${section}. This demo does not link mobile numbers to student accounts.`
         : 'OTP is incorrect or expired. Request a new demo OTP and try again.';
     });
 
